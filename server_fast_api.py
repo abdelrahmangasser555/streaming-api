@@ -5,27 +5,11 @@ from agent_generator import *
 import time
 import asyncio
 import os
-import uuid
-from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-
-# os.environ["LANGCHAIN_TRACING_V2"] = "true"
-# os.environ["LANGCHAIN_ENDPOINT"] = "https://api.smith.langchain.com"
-# os.environ["LANGCHAIN_API_KEY"] = "ls__fa867f0c19af4047a350a137490a262a"
-# os.environ["LANGCHAIN_PROJECT"] = "test"
 
 app = FastAPI()
 
-# enable CORS FOR ALL ORIGINS *
 origins = ["*"]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True, # allow credentials
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 def generate_data():
     for i in range(5):
