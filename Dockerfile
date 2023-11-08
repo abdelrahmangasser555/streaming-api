@@ -11,7 +11,7 @@ ENV AWS_LWA_INVOKE_MODE=response_stream
 WORKDIR /app
 ADD . .
 
-RUN pip install langchain openai tiktoken fastapi pinecone-client uvicorn boto3
+RUN pip install -r requirements.txt
 
 # run server
 CMD ["python", "server_fast_api.py"]
