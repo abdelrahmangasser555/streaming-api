@@ -11,7 +11,7 @@ from langchain.agents.openai_functions_agent.agent_token_buffer_memory import Ag
 from tools import AgentTool
 
 def _init_test_agent(session_id, streaming=False):
-    llm_chat = ChatOpenAI(temperature=0.2, model="gpt-3.5-turbo-1106", streaming=streaming)
+    llm_chat = ChatOpenAI(temperature=0.2, model="gpt-3.5-turbo-16k-0613", streaming=streaming)
     tools = [
         get_tool("retriever")(
             syllabus_vectorstore(),
