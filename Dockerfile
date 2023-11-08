@@ -14,4 +14,4 @@ ADD . .
 RUN pip install langchain openai tiktoken fastapi pinecone-client uvicorn boto3
 
 # run server
-CMD ["python", "main.py"]
+CMD ["python", "server_fast_api.py"]
