@@ -1,0 +1,30 @@
+version: 0.2
+
+# build a docker image from a github repo on aws codebuild
+# api keys are stores in aws secrets manager
+
+phases:
+  pre_build:
+    commands:
+      - |
+        # Retrieve secret and extract API keys
+        secret_json=$(aws secretsmanager get-secret-value --secret-id agent_builder)
+        OPENAI_API_KEY=$(echo "$secret_json" | jq -r '.SecretString | fromjson | .OPENAI_API_KEY')
+        PINECONE_API_KEY=$(echo "$secret_json" | jq -r '.SecretString | fromjson | .PINECONE_API_KEY_MAIN')
+        # Set environment variables
+        export OPENAI_API_KEY=$OPENAI_API_KEY
+        export PINECONE_API_KEY=$PINECONE_API_KEY
+
+      - aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin 073619244051.dkr.ecr.us-west-1.amazonaws.com
+
+  build:
+    commands:
+      # build docker image using ecr build commands and env variables
+      # print env variable
+      - echo $OPENAI_API_KEY
+      - echo $PINECONE_API_KEY
+      - docker build -t manufacturing-agent . --build-arg VAR1=$OPENAI_API_KEY --build-arg VAR2=$PINECONE_API_KEY
+      - docker tag manufacturing-agent:latest 073619244051.dkr.ecr.us-west-1.amazonaws.com/manufacturing-agent:latest
+      - docker push 073619244051.dkr.ecr.us-west-1.amazonaws.com/manufacturing-agent:latest
+      # update lambda function with new docker image
+      - aws lambda update-function-code --function-name manufacturing-agent --image-uri 073619244051.dkr.ecr.us-west-1.amazonaws.com/manufacturing-agent:latest
