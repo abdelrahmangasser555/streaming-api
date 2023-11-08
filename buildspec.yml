@@ -23,8 +23,8 @@ phases:
       # print env variable
       - echo $OPENAI_API_KEY
       - echo $PINECONE_API_KEY
-      - docker build -t manufacturing-agent . --build-arg VAR1=$OPENAI_API_KEY --build-arg VAR2=$PINECONE_API_KEY
-      - docker tag manufacturing-agent:latest 073619244051.dkr.ecr.us-west-1.amazonaws.com/manufacturing-agent:latest
-      - docker push 073619244051.dkr.ecr.us-west-1.amazonaws.com/manufacturing-agent:latest
+      - docker build -t streaming-api . --build-arg VAR1=$OPENAI_API_KEY --build-arg VAR2=$PINECONE_API_KEY
+      - docker tag streaming-api:latest 073619244051.dkr.ecr.us-west-1.amazonaws.com/streaming-api:latest
+      - docker push 073619244051.dkr.ecr.us-west-1.amazonaws.com/streaming-api:latest
       # update lambda function with new docker image
-      - aws lambda update-function-code --function-name manufacturing-agent --image-uri 073619244051.dkr.ecr.us-west-1.amazonaws.com/manufacturing-agent:latest
+      # aws lambda update-function-code --function-name manufacturing-agent --image-uri 073619244051.dkr.ecr.us-west-1.amazonaws.com/manufacturing-agent:latest
