@@ -16,7 +16,7 @@ def _init_test_agent(session_id, streaming=False):
         get_tool("retriever")(
             syllabus_vectorstore(),
             name="syllabus_database",
-            description="retrieve manufacturing techology syllabus data"
+            description="retrieve manufacturing technology syllabus data"
         ),
         # get_tool(AgentTool.TELEGRAM)(
         #     description="used to send a message to the teacher in case the user wanted a human to answer him."

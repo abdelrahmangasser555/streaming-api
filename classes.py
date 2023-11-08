@@ -9,8 +9,12 @@ from langchain.schema import (
 from langchain.schema.messages import (
     BaseMessage,
     _message_to_dict,
-    messages_from_dict,
     messages_to_dict,
+    HumanMessage,
+    AIMessage,
+    ChatMessage,
+    FunctionMessage,
+    AIMessageChunk
 )
 
 from langchain.memory import DynamoDBChatMessageHistory
@@ -61,6 +65,27 @@ class DynamoDBChatMessageHistoryNewFunctionsOnly(DynamoDBChatMessageHistoryNew):
         super().clear()
         self.messages = []
 
+
+def _message_from_dict(message: dict) -> BaseMessage:
+    _type = message["type"]
+    if _type == "human":
+        return HumanMessage(**message["data"])
+    elif _type == "ai":
+        return AIMessage(**message["data"])
+    elif _type == "system":
+        return SystemMessage(**message["data"])
+    elif _type == "chat":
+        return ChatMessage(**message["data"])
+    elif _type == "function":
+        return FunctionMessage(**message["data"])
+    elif _type == "AIMessageChunk":
+        return AIMessageChunk(**message["data"])
+    else:
+        raise ValueError(f"Got unexpected message type: {_type}")
+
+
+def messages_from_dict(messages: List[dict]) -> List[BaseMessage]:
+    return [_message_from_dict(m) for m in messages]
 
 class MessageStore(list):
     def __init__(self, chat_history: DynamoDBChatMessageHistoryNew, *args, **kwargs):
